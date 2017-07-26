@@ -1,0 +1,102 @@
+<!--index.wxml-->
+<swiper class="idx-swiper" indicator-dots="{{indicatorDots}}" indicator-active-color="#fff" indicator-color="rgba(255,255,255,.8)" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+  <block wx:for="{{bannerData}}" wx:key="{{index}}">
+    <swiper-item class="idx-swiper-item" bindtap="navOpenUrl" data-id="{{item.url}}">
+      <image src="{{item.pic}}" class="idx-swiper-image"></image>
+    </swiper-item>
+  </block>
+</swiper>
+
+<!--图书筛选-->
+<view class="section section_gap">
+  <scroll-view class="tingli-cate-box nowrap" scroll-x style="width: 100%">
+    <view class="item {{currentFilterListId==='grade' && currentFilterListShow?'current':''}}"
+     bindtap="filterList"
+      wx:if="{{filterList.grade.list.length}}"
+       data-id="{{filterList.grade.id}}"><text class="item-name elli">{{ajaxParams.gradename || filterList.grade.name}}</text></view>
+    <view class="item {{currentFilterListId==='year' && currentFilterListShow?'current':''}}"
+     bindtap="filterList" 
+     wx:if="{{filterList.year.list.length}}" 
+     data-id="{{filterList.year.id}}"><text class="item-name elli">{{ajaxParams.yearname || filterList.year.name}}</text></view>
+    <view class="item {{currentFilterListId==='series' && currentFilterListShow?'current':''}}"
+     bindtap="filterList" 
+     wx:if="{{filterList.series.list.length}}" 
+     data-id="{{filterList.series.id}}"><text class="item-name elli">{{ajaxParams.seriesname || filterList.series.name}}</text></view>
+    <view class="item {{currentFilterListId==='cate' && currentFilterListShow?'current':''}}"
+     bindtap="filterList" 
+     wx:if="{{filterList.cate.list.length}}" 
+     data-id="{{filterList.cate.id}}"><text class="item-name elli">{{ajaxParams.catename || filterList.cate.name}}</text></view>
+  </scroll-view>
+</view>
+
+<!--图书筛选2-->
+<view class="section section_gap" wx:if="{{filterList.other.list.length}}">
+  <scroll-view class="tingli-cate-child-box nowrap" scroll-x style="width: 100%">
+    <view class="item {{ajaxParams.otherid === item.id?'current':''}}" 
+    bindtap="filterItemOther"  
+    wx:for="{{filterList.other.list}}" 
+    wx:key="{{item.id}}" 
+    data-id="{{item.id}}">{{item.title}}</view>
+  </scroll-view>
+</view>
+
+<view class="res-list-wrap" wx:if="{{resultList.length}}">
+  <navigator url="/pages/play/play?id={{item.id}}" wx:for="{{resultList}}" wx:key="{{item.id}}">
+    <view class="res-list-item">
+      <!-- <image class="item-down" 
+      src="../../img/icon/down_icon.png" catchtap="downAudioFile" style="float:right;width:37rpx;height:32rpx;"></image> -->
+      <view class="item-title elli">
+        {{item.title}}
+      </view>
+      <text class="item-time">{{item.addtime}}</text>
+    </view>
+  </navigator>
+  
+</view>
+<view class="p-l tc text-muted" wx:if="{{resultList.length===0}}">暂无数据</view>
+
+<view class="pull-up-more-data" wx:if="{{listLoading && resultList.length}}">
+  {{loadingTips}}
+</view>
+
+<!-- <view class="p-xl"></view> -->
+
+
+
+
+
+
+<!--弹出遮罩层-->
+<view class="layer-shade" bindtap="closeShade" hidden="{{!currentFilterListShow}}"></view>
+
+<view class="filterListItemContent" hidden="{{currentFilterListShow===false}}">
+  <scroll-view class="scroll-box" scroll-y>
+    <view class="scroll-box-inner">
+
+      <!--年度-->
+      <view class="filter-item {{ajaxParams.yearid===item.id?'filter-item-selected':''}}" wx:for="{{currentFilterList}}" wx:key="{{item.id}}" bindtap="filterItemNormal" data-id="{{item.id}}" wx:if="{{currentFilterListId === 'year'}}">{{item.title}}</view>
+
+      <!--年级-->
+      <view class="filter-item {{ajaxParams.gradeid===item.id?'filter-item-selected':''}}" wx:for="{{currentFilterList}}" wx:key="{{item.id}}" bindtap="filterItemNormal" data-id="{{item.id}}" wx:if="{{currentFilterListId === 'grade'}}">{{item.title}}</view>
+
+      <!--图书系列-->
+      <view class="filter-item {{ajaxParams.seriesid===item.id?'filter-item-selected':''}}" wx:for="{{currentFilterList}}" wx:key="{{item.id}}" bindtap="filterItemNormal" data-id="{{item.id}}" wx:if="{{currentFilterListId === 'series'}}">{{item.title}}</view>
+
+
+
+      <!-- <view class="filter-list-series" wx:for="{{currentFilterList}}" wx:key="item" wx:if="{{currentFilterListId == 'series'}}">
+        <view class="title">{{item.seriesname}}</view>
+        <view class="series-content">
+          <view class="filter-item {{ajaxParams.seriesid==itemi.id?'filter-item-selected':''}}" wx:for="{{item.list}}" bindtap="filterItemNormal" wx:key="{{itemi.id}}" data-id="{{itemi.id}}" wx:for-item="itemi">{{itemi.title}}</view>
+        </view>
+      </view> -->
+
+      <!--类别-->
+      <view class="filter-item {{ajaxParams.cateid===item.id?'filter-item-selected':''}}" wx:for="{{currentFilterList}}" wx:key="{{item.id}}" bindtap="filterItemNormal" data-id="{{item.id}}" wx:if="{{currentFilterListId === 'cate'}}">{{item.title}}</view>
+
+    </view>
+
+  </scroll-view>
+
+  <view class="filter-list-content-bottom" bindtap="closeShade">关闭</view>
+</view>

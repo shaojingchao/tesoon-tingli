@@ -1,0 +1,245 @@
+<!--play.wxml-->
+
+
+<scroll-view bindscroll="pageScrollBox"
+scroll-with-animation="true"
+style="height:100%" 
+scroll-y="{{!answerInfo.result.answerModal==true || !audioListShow==true || TLType1ContextHide==true}}"
+scroll-top="{{pageOffsetTop}}">
+
+<view class="tl-page">
+  <view class="tingli-player card-box">
+    <view class="tl-content">
+      <view class="tl-title tc b">{{currentAudioData.title}}</view>
+
+      <!--播放进度-->
+      <view class="tl-state-wrap">
+        <view class="tingli-player-state">
+          <view class="bar-wrap">
+            <view class="bar bar-down-rate" style="width:{{downloadPercent}}%"></view>
+            <view class="bar bar-time-rate" bindtouchmove="drapPosition" style="width:{{currentPosition/duration*100}}%">
+              <view class="bar-time-dots">
+                <view class="bar-time-dots-small"></view>
+              </view>
+            </view>
+
+            <!--进度拖动-->
+            <slider class="bar-slider" bindchange="drapPosition" min="0" max="{{duration}}" value="{{currentPosition}}" />
+
+          </view>
+          <view class="tl-time-content">
+            <text style="float:left">{{currentTime}}</text>
+            <text style="float:right">{{totalTime}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!--播放控制-->
+
+      <view class="tl-ctrl">
+        <view class="tl-ctrl-menu" bindtap="currentAudioList">
+          <image src="../../img/icon/play_icon_menu.png" style="height:24rpx;width:32rpx"></image>
+        </view>
+        <view class="tl-ctrl-prev" bindtap="audioPrev">
+          <image src="../../img/icon/play_icon_prev.png" style="height:38rpx;width:32rpx"></image>
+        </view>
+        <view class="tl-ctrl-start" wx:if="{{audioState === 'ready' || audioState === 'pause'}}" bindtap="audioStart">
+          <image src="../../img/icon/play_icon_start.png" style="height:100rpx;width:100rpx"></image>
+        </view>
+        <view class="tl-ctrl-pause" bindtap="audioPause" wx:if="{{audioState === 'playing'}}">
+          <image src="../../img/icon/play_icon_pause.png" style="height:100rpx;width:100rpx"></image>
+        </view>
+        <view class="tl-ctrl-next" bindtap="audioNext">
+          <image src="../../img/icon/play_icon_next.png" style="height:38rpx;width:32rpx"></image>
+        </view>
+        <view class="tl-ctrl-replay" bindtap="audioReplay">
+          <block>
+            <image src="../../img/icon/play_icon_re_start.png" wx:if="{{replayStatus === 'ready'}}" style="height:34rpx;width:36rpx"></image>
+            <image src="../../img/icon/play_icon_re_pause.png" wx:if="{{replayStatus === 'start' || replayStatus === 'end'}}" style="height:34rpx;width:36rpx"></image>
+            <text class="text-primary" style="vertical-align:9rpx;"> {{replayStatusText}}</text>
+          </block>
+          <block wx:if="{{replayStatus === 'start' || replayStatus === 'end'}}">
+            <text class="text-primary" style="display:block">开始 {{replayTimeFormated.start}}</text>
+            <text class="{{replayStatus==='end'?'text-primary':'text-muted'}}" style="display:block">结束 {{replayTimeFormated.end}}</text>
+          </block>
+        </view>
+      </view>
+
+    </view>
+  </view>
+
+
+  <!--听力原文 类型1-->
+  <view class="pb-l" wx:if="{{contentType==2}}">
+    <view class="tl-context card-box">
+      <view class="clearfix head">
+        <text class="text-muted fl">听力原文</text>
+        <text class="text-primary fr" bindtap="toggleTLContext">{{TLContext.toggleText}}</text>
+      </view>
+
+      <view class="body">
+        <view class="body-inner {{TLContext.toggleText === '显示'?'tl-context-show':'tl-context-hide'}}">
+        <view>
+            <rich-text nodes="{{TLContext.context}}" name="div"></rich-text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+
+  <!--听力作答 类型2-->
+<view class="mb-l" wx:if="{{contentType==3}}">
+  <view class="tl-context card-box">
+    <view class="clearfix head">
+      <text class="text-muted fl">听力作答</text>
+    </view>
+
+    <view class="classname" 
+    wx:for="{{TLContextType1List}}" 
+    wx:for-index="idxI" 
+    wx:for-item="itemI" 
+    wx:key="{{idxI}}" 
+    data-id="{{idxI}}">
+      <view class="body pt-l">
+        <view>
+          <rich-text nodes="{{itemI.chaptertitle}}" name="div"></rich-text>
+        </view>
+      </view>
+      <view class="tr mt-m">
+        <text class="text-primary p-s dib" bindtap="showTLType1Context" data-id="{{idxI}}">本题原文</text>
+      </view>
+
+      <view class="">
+        <view class="pt-l" 
+        wx:for="{{itemI.question}}" 
+        wx:for-item="itemJ" 
+        wx:for-index="idxJ" 
+        wx:key="{{idxJ}}"
+        id="orderid_{{itemJ.order}}">
+          <view class="b"><text>{{itemJ.title}}</text></view>
+          <view class="tl-ques-answer-item {{(answerInfo.userAnswer[itemJ.order-1] == idxK)?'selected':''}} {{answerInfo.userAnswerIsChecked==true?(answerInfo.userAnswer[itemJ.order-1] == itemJ.answer)?'user-true':'user-false':''}}"
+            bindtap="slectedOptEvent"
+            data-order="{{itemJ.order}}"
+            wx:for="{{itemJ.qclist}}"
+            wx:for-item="items"
+            wx:for-index="idxK"
+            data-opt="{{idxK}}"
+            wx:key="{{items}}">
+          <text class="answer-opt">{{idxK}}</text>
+          <text class="answer-opt-text">{{items}}</text>
+          </view>
+          <view class="text-primary" wx:if="{{answerInfo.userAnswerIsChecked===true}}">正确答案：{{itemJ.answer}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 题号导航 -->
+  <view class="tl-my-answer-info card-box">
+    <view class="text-muted tc">
+      <text class="ques-nav {{answerInfo.userAnswer[index]!=null?'text-primary':'text-muted'}}"
+      wx:for="{{answerInfo.quesRightAnswer}}"
+      wx:for-index="index"
+      data-id="{{index+1}}"
+      bindtap="scrollToThisQuesId"
+      wx:key="{{index}}" >{{(index+1)<10?('0'+(index+1)):(index+1)}}</text>
+    </view>
+    <view class="tc mt-l">
+        <text class="text-primary p-s dib" bindtap="submitUserAnswerEvent">查看作答成绩</text>
+      </view>
+  </view>
+</view>
+
+<view class="contentType3Pic" wx:if="{{contentType==1}}">
+  <image class="type3pic" src="../../img/icon/play_pic.png"></image>
+</view>
+
+
+  <!-- 答题结果 -->
+
+  <!--弹出遮罩层-->
+<view class="layer-shade" bindtap="closeShadeAnswerResult" hidden="{{!answerInfo.result.answerModal}}"></view>
+<view class="tl-my-answer-result-layer" hidden="{{!answerInfo.result.answerModal}}">
+  <view class="tl-my-answer-result">
+    <view class="answer-info">
+      <text>答题结果:正确<text class="text-primary">{{answerInfo.result.trueNum}}</text>题，错误<text class="text-danger">{{answerInfo.result.falseNum}}</text>题，正确率<text class="text-primary">{{answerInfo.result.trueRate}}</text>。</text>
+    </view>
+    <view class="ques-order-box">
+      <text wx:for="{{answerInfo.quesRightAnswer}}"
+      class="{{answerInfo.userAnswerIsChecked===true?(answerInfo.userAnswer[index]==item?'text-primary':'text-danger'):'text-muted'}}"
+        wx:key="{{index}}"
+        wx:for-index="index">{{(index+1)<10?('0'+(index+1)):(index+1)}}</text>
+    </view>
+
+    <view class="tc mt-m mb-s">
+    <button class="tl-btn tl-btn-second mr-m" bindtap="reloadThisPage" type="default" style="display:inline-block;font-size:28rpx;width:200rpx;">重新作答</button>
+    <button class="tl-btn tl-btn-second" bindtap="closeShadeAnswerResult" type="primary" style="display:inline-block;font-size:28rpx;width:200rpx;">关闭</button>
+    </view>
+  </view>
+</view>
+
+  <!-- 答题结果 END-->
+
+
+
+
+<!--本题原文-->
+<view class="layer-shade" bindtap="showTLType1Context" hidden="{{TLType1ContextHide}}"></view>
+<view class="tl-type-1-modal" hidden="{{TLType1ContextHide}}">
+  <view class="tl-head">听力原文</view>
+  <scroll-view class="tl-body" scroll-y>
+    <view class="tl-body-inner">
+      <rich-text 
+      wx:for="{{TLContextType1List}}" 
+      nodes="{{item.mp3source}}" 
+      wx:if="{{index===TLContext.currentContextId}}"
+      wx:key="{{index}}"></rich-text>
+    </view>
+  </scroll-view>
+  <view class="text-primary tl-handle" bindtap="showTLType1Context">关闭</view>
+</view>
+
+<!--本题原文-end-->
+
+
+
+</view>
+
+<!--播放列表-->
+
+<!--弹出遮罩层-->
+<view class="layer-shade" bindtap="closeShade" hidden="{{!audioListShow}}"></view>
+
+<view class="filterListItemContent" hidden="{{audioListShow===false}}">
+  <view class="filter-list-content-top">
+    <text>播放列表</text>
+
+    <!--播放方式 -->
+    <view style="float:right" bindtap="togglePlayType">
+      <image wx:if="{{playTypeOne}}" src="../../img/icon/play_list_icon_2.png" class="audio-list-play-icon"></image>
+       <image wx:else src="../../img/icon/play_list_icon_1.png" class="audio-list-play-icon"></image> 
+    </view>
+  </view>
+
+  <scroll-view class="scroll-box" scroll-y>
+    <view class="scroll-box-inner">
+      <view class="audio-list-item elli" 
+      bindtap="currentAudioListPlayItem" 
+      wx:for="{{audioList}}" 
+      data-id="{{item.id}}" 
+      wx:key="{{item.id}}">
+        <image class="audio-list-item-playing-icon" 
+        wx:if="{{item.id === currentAudioId}}" 
+        src="../../img/icon/playing.gif" 
+        style="height:22rpx;width:16rpx;"></image>{{item.title}}
+      </view>
+    </view>
+    <!--list-->
+
+
+  </scroll-view>
+
+  <view class="filter-list-content-bottom" bindtap="closeShade">关闭</view>
+</view>
+</scroll-view>
