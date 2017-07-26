@@ -1,2 +1,42 @@
-<!--search.wxml-->
-<text>search.wxml</text>
+
+<import src="../../common/list-item.wxml"/>
+
+<!--图书搜索-->
+<view class="search-section section section_gap">
+  <view class="tingli-search-box">
+    <text class="search-btn text-primary" bindtap="searchByKeywords">搜索</text>
+    <input type="text" 
+    value="{{inputValue}}"
+     placeholder="{{inputPlaceholder}}" 
+     bindinput="bindKeyInput" 
+     focus="true" 
+     bindconfirm="searchByKeywords"
+     confirm-type="search" />
+  </view>
+</view>
+
+<!-- 搜索结果 -->
+<!-- <view class="search-res">
+  <view class="his-item f28">金考卷</view>
+  <view class="his-item f28">英语听力</view>
+</view> -->
+
+
+<!-- 搜索历史 -->
+<view hidden="{{!historyData.length>0 || !showHistory}}">
+  <view class="p-m text-muted f26">搜索历史</view>
+  <view class="search-history">
+    <view class="his-item f28" wx:for="{{historyData}}" bindtap="bindHistoryDataKeySearch" data-id="{{item}}" wx:key="{{index}}">{{item}}</view>
+    <view class="text-muted clear-btn tc f26" bindtap="clearHistoryData">清除搜索记录</view>
+  </view>
+</view>
+
+<template is="ListItem" data="{{resultList:resultList}}"/>
+
+<view class="classname" wx:if="{{resultList.length===0}}">
+  <view class="p-l tc text-muted">未找到相关内容</view>
+</view>
+
+<view class="pull-up-more-data" wx:if="{{listLoading && resultList.length}}">
+  {{loadingTips}}
+</view>

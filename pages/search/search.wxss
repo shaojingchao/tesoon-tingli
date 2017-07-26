@@ -1,1 +1,31 @@
 /* search.wxss */
+page{
+  background-color:#f4f4f4;
+}
+.search-section{
+  background-color:#fff;
+}
+.search-history{
+  padding:0 20rpx;
+  background-color:#fff;
+}
+.search-history .his-item{
+  /* line-height:50rpx; */
+  padding:20rpx 0;
+  border-top:1px solid #f3f3f3;
+}
+.search-history .clear-btn{
+  border-top:1px solid #f3f3f3;
+  padding:20rpx;
+  text-align: center;
+}
+
+/* 搜索结果 */
+.search-res{
+  padding:0 20rpx;
+  background-color:#fff;
+}
+.search-res .his-item{
+  padding:20rpx 0;
+  border-bottom:1px solid #f3f3f3;
+}

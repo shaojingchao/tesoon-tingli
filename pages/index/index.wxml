@@ -1,4 +1,6 @@
-<!--index.wxml-->
+
+<import src="../../common/list-item.wxml"/>
+
 <swiper class="idx-swiper" indicator-dots="{{indicatorDots}}" indicator-active-color="#fff" indicator-color="rgba(255,255,255,.8)" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
   <block wx:for="{{bannerData}}" wx:key="{{index}}">
     <swiper-item class="idx-swiper-item" bindtap="navOpenUrl" data-id="{{item.url}}">
@@ -6,6 +8,16 @@
     </swiper-item>
   </block>
 </swiper>
+
+
+<!--图书搜索-->
+ <view class="section section_gap" bindtap="goSearchPage">
+    <view class="tingli-search-box">
+    <text class="search-btn text-primary">搜索</text>
+    <input style="z-index:-1;position:relative" type="text" disabled="true" placeholder="内容关键词搜索" /> 
+    </view>
+  </view>
+
 
 <!--图书筛选-->
 <view class="section section_gap">
@@ -40,20 +52,11 @@
   </scroll-view>
 </view>
 
-<view class="res-list-wrap" wx:if="{{resultList.length}}">
-  <navigator url="/pages/play/play?id={{item.id}}" wx:for="{{resultList}}" wx:key="{{item.id}}">
-    <view class="res-list-item">
-      <!-- <image class="item-down" 
-      src="../../img/icon/down_icon.png" catchtap="downAudioFile" style="float:right;width:37rpx;height:32rpx;"></image> -->
-      <view class="item-title elli">
-        {{item.title}}
-      </view>
-      <text class="item-time">{{item.addtime}}</text>
-    </view>
-  </navigator>
-  
+<template is="ListItem" data="{{resultList:resultList}}"/>
+
+<view class="classname" wx:if="{{resultList.length===0}}">
+  <view class="p-l tc text-muted">未找到相关内容</view>
 </view>
-<view class="p-l tc text-muted" wx:if="{{resultList.length===0}}">暂无数据</view>
 
 <view class="pull-up-more-data" wx:if="{{listLoading && resultList.length}}">
   {{loadingTips}}

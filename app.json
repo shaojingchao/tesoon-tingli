@@ -3,8 +3,7 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/search/search",
-    "pages/play/play",
-    "pages/search"
+    "pages/play/play"
   ],
   "window": {
     "navigationBarTitleText": "天星教育|配套听力",

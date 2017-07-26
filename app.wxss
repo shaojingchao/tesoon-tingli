@@ -1,5 +1,5 @@
 /**app.wxss**/
-view{
+page{
   font-family: "Arial";
 font-size:30rpx;
 color:#333;
@@ -155,6 +155,25 @@ color:#333;
 }
 .text-danger{
   color:#e00;
+}
+
+.f26{
+  font-size:26rpx;
+}
+.f28{
+  font-size:28rpx;
+}
+.f30{
+  font-size:30rpx;
+}
+.f32{
+  font-size:32rpx;
+}
+.bg-f{
+  background-color:#fff;
+}
+.bg-e{
+  background-color:#eee;
 }
 /* btn */
 .tl-btn{
@@ -352,6 +371,35 @@ color:#333;
 .filter-list-content-top .audio-list-play-icon{
   width:36rpx;
   height:34rpx;
+}
+
+
+/* 搜索框 */
+.tingli-search-box{
+padding:30rpx 100rpx 30rpx 30rpx;
+border-bottom:1rpx solid #eee;
+
+}
+.tingli-search-box input{
+  border:1rpx solid #eee;
+  box-sizing:content-box;
+  height:62rpx;
+  line-height:62rpx;
+  padding:0rpx 20rpx;
+  border-radius:35rpx 0 0 35rpx;
+  text-align: center;
+}
+.tingli-search-box .search-btn{
+  box-sizing:content-box;
+  float:right;
+  height:66rpx;
+  line-height:68rpx;
+  padding:0 30rpx;
+  letter-spacing: 6rpx;
+  margin-right:-70rpx;
+  border:1rpx solid #eee;
+  border-left:none;
+  border-radius: 0 35rpx 35rpx 0;
 }
 
 /*底部加载提示*/

@@ -1,0 +1,12 @@
+<template name="ListItem">
+<view class="res-list-wrap bg-f" wx:if="{{resultList.length}}">
+  <navigator url="/pages/play/play?id={{item.id}}" wx:for="{{resultList}}" wx:key="{{item.id}}">
+    <view class="res-list-item">
+      <view class="item-title">
+        <rich-text nodes="{{item.title}}"/>
+      </view>
+      <text class="item-time">{{item.addtime}}</text>
+    </view>
+  </navigator>
+</view>
+</template>

@@ -328,9 +328,11 @@ Page({
   // 初次加载
   onReady: function () {
     var _this = this;
+    wx.showNavigationBarLoading();
     wx.request({
       url: 'https://weixin.tesoon.com/index.php?m=listen&ajax=1',
       success: function (res) {
+        wx.hideNavigationBarLoading();
         _this.setData({
           filterData: res.data.filterData,
           bannerData: res.data.bannerData,
@@ -364,13 +366,19 @@ Page({
       that.setData({
         loadingTips: "数据加载中"
       })
-    },250)
+    },150)
 
     setTimeout(function(){
       that.getResultList(that.data.resultListId, true, function () {
         that.listDataLoadedCb();
       });
-    },500)
+    },400)
+  },
+
+  goSearchPage:function(){
+    wx.navigateTo({
+      url: '/pages/search/search',
+    })
   },
   
   //加载完成回调
