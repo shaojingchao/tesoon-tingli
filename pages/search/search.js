@@ -162,17 +162,17 @@ Page({
       return false;
     }
   
-    var inputValue = that.data.inputValue;
+    var inputValue = that.data.inputValue.trim();
 
     var cacheArr = that.data.historyData;
 
     var arrIndexOf = cacheArr.indexOf(inputValue);
 
     if (arrIndexOf===-1){
-      cacheArr.unshift(that.data.inputValue);
+      cacheArr.unshift(inputValue);
     }else{
       cacheArr.splice(arrIndexOf, 1);
-      cacheArr.unshift(that.data.inputValue);
+      cacheArr.unshift(inputValue);
     }
     
     that.setData({
