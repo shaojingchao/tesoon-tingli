@@ -224,9 +224,11 @@ color:#333;
   /*margin-top:20rpx;*/
 }
 .tingli-cate-box{
+  display: flex;
   background-color:#fff;
   white-space:nowrap;
   border-bottom:1rpx solid #eee;
+  height:60rpx;
   padding:26rpx 0;
 }
 .tingli-cate-box .item{
@@ -254,19 +256,21 @@ color:#333;
 }
 .tingli-cate-box .item:after{
   content:"";
-  /* display:inline-block; */
+  float: right;
+  margin-top:24rpx;
   border:0 solid #666;
   border-width:12rpx 10rpx 12rpx 10rpx;
   width:0;
   height:0;
-  vertical-align:-4rpx;
   margin-left:14rpx;
   border-color:#666 transparent transparent transparent;
 }
 
 .tingli-cate-child-box{
+  display: flex;
   border-bottom:1rpx solid #eee;
   padding:26rpx 0;
+  height:70rpx;
 }
 .tingli-cate-child-box .item{
   display: inline-block;

@@ -26,13 +26,6 @@ Page({
     },
     currentAudioData: {},
     audioList: [
-      // {
-      //   id: 'audioid05',
-      //   title: "此时此刻5",
-      //   author: '许巍',
-      //   dataUrl: 'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46',
-      //   coverImgUrl: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
-      // }
     ],
 
     // 听力原文
@@ -82,8 +75,14 @@ Page({
     clearInterval(playStateTimer);
   },
   onLoad: function (obj) {
+    var that = this;
 
-    // 网络状态改变
+    // 记录当前播放的音频id
+    this.setData({
+      currentAudioId: obj.id
+    });
+
+    // 监听网络状态改变
     wx.onNetworkStatusChange(function (res) {
       if (res.networkType !== "none") {
         wx.showToast({
@@ -97,11 +96,11 @@ Page({
     })
 
     // 请求数据
-    var that = this;
-
     wx.getNetworkType({
       success: function (res) {
         var networkType = res.networkType;
+        
+        // 没有网络
         if (res.networkType === "none") {
           wx.showModal({
             title: '网络不可用，请链接网络后重试！',
@@ -114,42 +113,36 @@ Page({
             title: '拼命加载中',
           });
 
-          console.log(obj);
-
-          that.setData({
-            currentAudioId: obj.id
-          });
+          // 请求音频数据
           wx.request({
             url: "https://weixin.tesoon.com/index.php?m=listen&c=show&ajax=1&id=" + obj.id,
             success: function (res) {
-
-              console.log(res);
-
               var resContent = res.data.data.content;
-
+              wx.hideLoading();
+              if (networkType !== "wifi") {
+                wx.showToast({
+                  title: `您正在使用${networkType}网络`,
+                  duration: 2500
+                });
+              }
               if (res.data.ret === 1) {
-
                 if (resContent) {
-
                   var contentType = resContent.type;
                   that.setData({
-                    "contentType": resContent.type,
-                    "audioList": res.data.data.audioList,
+                    "contentType": resContent.type, // 数据类型 
+                    "audioList": res.data.data.audioList, // 音频列表
                     "currentAudioData.id": obj.id,
                     "currentAudioData.dataUrl": resContent.dataUrl,
                     "currentAudioData.title": resContent.title,
                     "currentAudioData.coverImgUrl": resContent.coverImgUrl,
                   })
-
+                  console.log('开始播放')
                   that.audioStart();
 
                   // 1,无内容
-
                   if (contentType == 1) {
 
                   }
-
-
 
                   if (contentType == 2 || contentType == 3) {
 
@@ -191,16 +184,7 @@ Page({
                       "answerInfo.quesRightAnswer": answerArr
                     });
                   }
-
                 }
-              }
-
-              wx.hideLoading();
-              if (networkType !== "wifi") {
-                wx.showToast({
-                  title: `您正在使用${networkType}网络`,
-                  duration: 2500
-                });
               }
             },
             fail: function () {
@@ -238,6 +222,8 @@ Page({
   audioPlay: function (id) {
     this.audioPlayInit();
 
+    console.log('audioPlay')
+
     var _this = this;
     var currentList = this.data.audioList.filter(function (item, i) {
       if (item.id === id) {
@@ -257,7 +243,7 @@ Page({
         title: currentListItem.title,
         coverImgUrl: currentListItem.coverImgUrl,
         success: function () {
-          console.log()
+          console.log('playing========')
           _this.setPlayerState();
           wx.setNavigationBarTitle({
             title: "天星教育|配套听力-" + currentListItem.title
@@ -265,6 +251,8 @@ Page({
           _this.setData({
             audioState: "playing"
           })
+        },fail: function () {
+          console.log('error')
         }
       })
     }
@@ -304,6 +292,7 @@ Page({
 
   // 开始播放
   audioStart: function () {
+    console.log('audioStart')
     if (this.data.audioState === 'ready') {
       this.audioPlay(this.data.currentAudioId);
     } else {
@@ -376,7 +365,7 @@ Page({
             shouldCurrentAudioIdIndex = i + 1;
           } else {
             wx.showToast({
-              title: '没有下一曲了',
+              title: '没有下一曲',
             })
             return false;
           }
@@ -389,7 +378,7 @@ Page({
             shouldCurrentAudioIdIndex = i - 1;
           } else {
             wx.showToast({
-              title: '没有上一曲了',
+              title: '没有上一曲',
             })
             return false;
           }
@@ -596,14 +585,6 @@ Page({
     wx.redirectTo({
       url: '/pages/play/play?id=' + that.data.currentAudioId
     })
-    // this.setData({
-    //   "answerInfo.userAnswer": [],
-    //   "answerInfo.userAnswerIsChecked": false,
-    //   "answerInfo.result.answerModal": false,
-    //   "answerInfo.result.trueNum": 0,
-    //   "answerInfo.result.falseNum": 0,
-    //   "answerInfo.result.trueRate": 0
-    // })
   },
 
   //关闭答题结果弹框
@@ -615,9 +596,5 @@ Page({
   
   onUnload:function(){
     this.audioPause();
-  },
-
-  // 触底操作
-  onReachBottom: function () {
   }
 })

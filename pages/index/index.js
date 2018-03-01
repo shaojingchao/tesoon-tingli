@@ -362,17 +362,13 @@ Page({
       return false;
     }
 
-    setTimeout(function(){
-      that.setData({
-        loadingTips: "数据加载中"
-      })
-    },150)
+    that.setData({
+      loadingTips: "数据加载中"
+    })
 
-    setTimeout(function(){
-      that.getResultList(that.data.resultListId, true, function () {
-        that.listDataLoadedCb();
-      });
-    },400)
+    that.getResultList(that.data.resultListId, true, function () {
+      that.listDataLoadedCb();
+    });
   },
 
   goSearchPage:function(){
