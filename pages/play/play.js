@@ -30,7 +30,7 @@ Page({
 
     // 听力原文
     TLContext: {
-      toggleText: "显示",
+      toggleText: "隐藏",
       currentContextId: "",
       context: ""
     },

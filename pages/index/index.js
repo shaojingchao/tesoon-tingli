@@ -70,7 +70,7 @@ Page({
       data: e.currentTarget.dataset.id,
       success: function () {
         wx.showModal({
-          content: '链接复制成功！请使用浏览器打开查看。（由于小程序功能限制，不能直接打开外部链接，抱歉）',
+          content: '链接复制成功！请使用浏览器查看详细信息',
         })
       }
     })

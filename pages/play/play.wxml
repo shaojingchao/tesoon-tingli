@@ -78,7 +78,7 @@ scroll-top="{{pageOffsetTop}}">
       </view>
 
       <view class="body">
-        <view class="body-inner {{TLContext.toggleText === '显示'?'tl-context-show':'tl-context-hide'}}">
+        <view class="body-inner {{TLContext.toggleText === '隐藏'?'tl-context-show':'tl-context-hide'}}">
         <view>
             <rich-text nodes="{{TLContext.context}}" name="div"></rich-text>
           </view>

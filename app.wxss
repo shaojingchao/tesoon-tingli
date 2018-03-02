@@ -387,8 +387,8 @@ border-bottom:1rpx solid #eee;
 .tingli-search-box input{
   border:1rpx solid #eee;
   box-sizing:content-box;
-  height:62rpx;
-  line-height:62rpx;
+  height:66rpx;
+  line-height:66rpx;
   padding:0rpx 20rpx;
   border-radius:35rpx 0 0 35rpx;
   text-align: center;
