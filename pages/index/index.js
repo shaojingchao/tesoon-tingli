@@ -349,6 +349,7 @@ Page({
   //加载更多
   onReachBottom: function () {
     var that = this;
+    console.log('loadmore')
 
     if (!that.data.resultList.length){
       return false;
